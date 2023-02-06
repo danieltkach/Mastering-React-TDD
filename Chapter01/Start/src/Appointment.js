@@ -1,7 +1,7 @@
 import React from 'react';
 
-export const Appointment = () => {
+export const Appointment = ({customer}) => {
   return (
-    "Welcome to my testing application"
+    customer.firstName
   );
 };
