@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Home } from "../src/views/Home";
+import { Appointment } from './src/Appointment';
 
-describe("Home component", () => {
-  const container = Document.createElement("div");
-  document.body.appendChild(container);
-  const component = <Home />
-  ReactDOM.createRoot(container).render(component);
-  it("renders the home component", () => {
-    expect(document.body.textContent).toContain("Welcome to Mentor Blog");
+describe("Appointment component", () => {
+  
+  it("renders the component", () => {
+    const customer = { firstName: "Ashley" };
+    const component = <Appointment customer={customer}/>
+    
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    ReactDOM.createRoot(container).render(component);
+    
+    expect(document.body.textContent).toContain("Welcome to my testing application");
   })
 });
