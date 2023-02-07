@@ -4,7 +4,7 @@
   "description": "Appointments system",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --watchAll",
     "format": "prettier --write {src,test}/*",
     "lint": "eslint {src,test}/**/*"
   },
