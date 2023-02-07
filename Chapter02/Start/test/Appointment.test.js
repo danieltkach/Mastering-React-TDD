@@ -3,6 +3,18 @@ import ReactDOM from 'react-dom/client';
 import { Appointment, AppointmentsDayView } from '../src/Appointment';
 import { act } from 'react-dom/test-utils';
 
+let today = new Date();
+const twoAppointments = [
+  {
+    startsAt: today.setHours(12, 0),
+    customer: { firstName: 'Ashley' },
+  },
+  {
+    startsAt: today.setHours(13, 0),
+    customer: { firstName: 'Jordan' },
+  },
+];
+
 describe("Appointment component", () => {
   let container;
   beforeEach(() => {
@@ -26,23 +38,9 @@ describe("Appointment component", () => {
     const customer = { firstName: "Cody" };
     assert(customer);
   });
-
-  
 });
 
 describe('AppointmentsDayView component', () => {
-  let today = new Date();
-  const twoAppointments = [
-    { 
-      startsAt: today.setHours(12, 0),
-      customer: {firstName: 'Ashley' },
-    },
-    { 
-      startsAt: today.setHours(13, 0),
-      customer: {firstName: 'Jordan' },
-    },
-  ];
-
   let container;
   beforeEach(() => {
     container = document.createElement('div');
@@ -75,20 +73,27 @@ describe('AppointmentsDayView component', () => {
     expect(listChildren[1].textContent).toEqual('13:00');
   });
 
-  it('initially shows a message saying there are no appointments today', ()=> {
+  it('initially shows a message saying there are no appointments today', () => {
     render(<AppointmentsDayView appointments={[]} />);
     expect(document.body.textContent).toContain('There are no appointments scheduled for today.');
   });
 
-  it('selects the first appointment by default', ()=> {
+  it('selects the first appointment by default', () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
     expect(document.body.textContent).toContain('Ashley');
   });
 
-  it('has a button element in each li', ()=> {
+  it('has a button element in each li', () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
     const buttons = document.querySelectorAll('li > button');
     expect(buttons).toHaveLength(2);
     expect(buttons[0].type).toEqual('button');
-  })
+  });
+
+  it('renders another appointment when selected', () => {
+    render(<AppointmentsDayView appointments={twoAppointments} />);
+    const buttons = document.querySelectorAll('button');
+    act(()=>buttons[1].click());
+    expect(document.body.textContent).toContain('Jordan');
+  });
 });
