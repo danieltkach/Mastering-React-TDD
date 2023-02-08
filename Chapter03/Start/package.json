@@ -7,7 +7,7 @@
     "build": "webpack",
     "format": "prettier --write {src,test}/*",
     "lint": "eslint {src,test}/**/*",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "repository": {
     "type": "git",
