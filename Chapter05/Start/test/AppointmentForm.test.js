@@ -30,11 +30,11 @@ describe('AppointmentForm', () => {
 
   it('renders a form', () => {
     render(
-      <AppointmentForm 
-        original={blankAppointment} 
+      <AppointmentForm
+        original={blankAppointment}
         availableTimeSlots={availableTimeSlots}
       />
-      );
+    );
     expect(form()).not.toBeNull();
   });
 
@@ -47,13 +47,13 @@ describe('AppointmentForm', () => {
     };
 
     it('renders a select box', () => {
-      render(<AppointmentForm original={blankAppointment} availableTimeSlots={availableTimeSlots}/>);
+      render(<AppointmentForm original={blankAppointment} availableTimeSlots={availableTimeSlots} />);
       expect(field('service')).not.toBeNull();
       expect(field('service').tagName).toEqual('SELECT');
     });
 
     it('has a blank value as the first value', () => {
-      render(<AppointmentForm original={blankAppointment} availableTimeSlots={availableTimeSlots}/>);
+      render(<AppointmentForm original={blankAppointment} availableTimeSlots={availableTimeSlots} />);
       const firstOption = field('service').childNodes[0];
       expect(firstOption.value).toEqual('');
     });
@@ -90,7 +90,7 @@ describe('AppointmentForm', () => {
   describe('time slot table', () => {
     it('renders a table for time slots with an id', () => {
       render(
-        <AppointmentForm original={blankAppointment} availableTimeSlots={availableTimeSlots}/>
+        <AppointmentForm original={blankAppointment} availableTimeSlots={availableTimeSlots} />
       );
       expect(
         element('table#time-slots')
@@ -174,5 +174,20 @@ describe('AppointmentForm', () => {
     expect(
       elements('input[type=radio]')
     ).toHaveLength(0);
+  });
+
+  it('sets radio button values to the startsAt value of the corresponding appointment', () => {
+    render(
+      <AppointmentForm
+        original={blankAppointment}
+        availableTimeSlots={availableTimeSlots}
+        today={today}
+      />
+    );
+    const allRadioValues = elements('input[type=radio').map(({ value }) => parseInt(value));
+    const allSlotTimes = availableTimeSlots.map(
+      ({ startsAt }) => startsAt
+    );
+    expect(allRadioValues).toEqual(allSlotTimes);
   });
 });

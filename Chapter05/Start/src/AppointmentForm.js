@@ -53,6 +53,30 @@ const mergeDateAndTime = (date, timeSlot) => {
   );
 };
 
+const RadioButtonIfAvailable = ({
+  availableTimeSlots,
+  date,
+  timeSlot,
+}) => {
+  const startsAt = mergeDateAndTime(date, timeSlot);
+
+  if (
+    availableTimeSlots.some(
+      (timeSlot) => timeSlot.startsAt === startsAt
+    )
+  ) {
+    return (
+      <input
+        name="startsAt"
+        type="radio"
+        value={startsAt}
+      />
+    );
+  }
+  return null;
+};
+
+
 const TimeSlotTable = ({ salonOpensAt, salonClosesAt, today, availableTimeSlots }) => {
   const dates = weeklyDateValues(today);
   const timeSlots = dailyTimeSlots(salonOpensAt, salonClosesAt);
@@ -76,12 +100,11 @@ const TimeSlotTable = ({ salonOpensAt, salonClosesAt, today, availableTimeSlots 
               {
                 dates.map(date => (
                   <td key={date}>
-                    {
-                      availableTimeSlots.some(availableTimeSlot =>
-                        availableTimeSlot.startsAt === mergeDateAndTime(date, timeSlot))
-                        ? <input type="radio" />
-                        : null
-                    }
+                    <RadioButtonIfAvailable
+                      availableTimeSlots={availableTimeSlots}
+                      date={date}
+                      timeSlot={timeSlot}
+                    />
                   </td>
                 ))
               }
@@ -96,7 +119,6 @@ const TimeSlotTable = ({ salonOpensAt, salonClosesAt, today, availableTimeSlots 
 export const AppointmentForm = ({
   selectableServices,
   original,
-  service,
   salonOpensAt,
   salonClosesAt,
   today,
