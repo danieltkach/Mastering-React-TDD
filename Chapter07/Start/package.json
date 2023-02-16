@@ -9,7 +9,7 @@
     "format": "prettier --write {src,test,server}/*",
     "lint": "eslint {src,test,server}/**/*",
     "serve": "node dist/server/server.js",
-    "test": "jest",
+    "test": "jest --watch",
     "test-server": "jest --config server/jest.json"
   },
   "repository": {

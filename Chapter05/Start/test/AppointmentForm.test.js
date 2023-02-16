@@ -10,15 +10,16 @@ import {
   click,
 } from './reactTestExtensions';
 import { AppointmentForm } from '../src/AppointmentForm';
+import { today, todayAt } from './builders/time';
+
 
 describe('AppointmentForm', () => {
   const blankAppointment = {
     service: '',
   };
-  const today = new Date();
   const availableTimeSlots = [
-    { startsAt: today.setHours(9, 0, 0, 0) },
-    { startsAt: today.setHours(9, 30, 0, 0) },
+    { startsAt: todayAt(9) },
+    { startsAt: todayAt(9, 30) },
   ];
 
   beforeEach(() => {
@@ -154,8 +155,8 @@ describe('AppointmentForm', () => {
         today.getTime() + oneDayInMs
       );
       const availableTimeSlots = [
-        { startsAt: today.setHours(9, 0, 0, 0) },
-        { startsAt: today.setHours(9, 30, 0, 0) },
+        { startsAt: todayAt(9) },
+        { startsAt: todayAt(9, 30) },
         { startsAt: tomorrow.setHours(9, 30, 0, 0) }
       ];
       render(
@@ -211,7 +212,7 @@ describe('AppointmentForm', () => {
 
     it('renders a submit button', () => {
       render(
-        <AppointmentForm original={blankAppointment} />
+        <AppointmentForm original={blankAppointment} availableTimeSlots={availableTimeSlots} />
       );
       expect(submitButton()).not.toBeNull();
     });
@@ -226,13 +227,34 @@ describe('AppointmentForm', () => {
           original={appointment}
           availableTimeSlots={availableTimeSlots}
           today={today}
-          onSubmit={ ({startsAt}) => 
+          onSubmit={({ startsAt }) =>
             expect(startsAt).toEqual(
               availableTimeSlots[1].startsAt
             )
           }
         />
-      )
+      );
+      click(submitButton());
+    });
+
+    it('saves new value when submitted', () => {
+      expect.hasAssertions();
+      const appointment = {
+        startsAt: availableTimeSlots[0].startsAt,
+      };
+      render(
+        <AppointmentForm
+          original={appointment}
+          availableTimeSlots={availableTimeSlots}
+          today={today}
+          onSubmit={({ startsAt }) =>
+            expect(startsAt).toEqual(
+              availableTimeSlots[1].startsAt
+            )
+          }
+        />
+      );
+      click(startsAtField(1));
       click(submitButton());
     });
   });
